@@ -1,0 +1,30 @@
+{
+  "name": "nyaya-guard",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Hallucination-proof welfare RAG: deterministic rules decide, LLM only rephrases.",
+  "type": "module",
+  "scripts": {
+    "dev": "tsx watch src/server.ts",
+    "start": "tsx src/server.ts",
+    "build": "tsc -p tsconfig.json",
+    "test": "vitest run",
+    "eval": "tsx eval/run-eval.ts",
+    "sample": "tsx eval/sample.ts",
+    "ingest": "tsx src/ingest.ts"
+  },
+  "dependencies": {
+    "@hono/node-server": "^1.13.7",
+    "hono": "^4.7.4",
+    "pg": "^8.23.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.9.0",
+    "tsx": "^4.19.9",
+    "typescript": "^5.6.3",
+    "vitest": "^3.1.1"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

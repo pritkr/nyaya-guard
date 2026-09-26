@@ -1,0 +1,8 @@
+dist/
+node_modules/
+logs/*.jsonl
+!logs/.gitkeep
+eval/results/*
+!eval/results/last-run.md
+web/dist/
+web/node_modules/
