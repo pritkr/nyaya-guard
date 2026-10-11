@@ -1,0 +1,60 @@
+services:
+  api:
+    build: .
+    ports:
+      - "8080:8080"
+    environment:
+      PORT: "8080"
+      # v3 retrieval backend: `memory` (default) or `pg`.
+      # Default stays memory so the container has no hard database dependency
+      # and `docker compose up` is enough to demo the whole trust boundary.
+      STORE: "${STORE:-memory}"
+      # Uncomment (or export) to run against the `pg` profile below:
+      # DATABASE_URL: postgres://nyaya:nyaya@db:5432/nyaya
+      # TENANT_ID: bihar:default
+      # Optional OpenAI-compatible rephrase layer (mock by default):
+      # OPENAI_BASE_URL: ${OPENAI_BASE_URL:-}
+      # OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+      # OPENAI_MODEL: ${OPENAI_MODEL:-gpt-4o-mini}
+    volumes:
+      - ./logs:/app/logs
+      - ./data:/app/data:ro
+
+  # ---------------------------------------------------------------------------
+  # `pg` profile: Postgres + pgvector + pg_trgm.
+  #
+  # NOT started by `docker compose up` — it lives behind a profile on purpose.
+  # The whole v3 argument is that CI and a first `git clone` must work with no
+  # database at all; making the database part of the default startup would undo
+  # that. Opt in when you actually want to test tenant isolation:
+  #
+  #     docker compose --profile pg up -d db
+  #     DATABASE_URL=postgres://nyaya:nyaya@localhost:5433/nyaya npm test
+  #     STORE=pg TENANT_ID=bihar:default DATABASE_URL=postgres://nyaya:nyaya@localhost:5433/nyaya npm run dev
+  #
+  # db/schema.sql and db/role.sql run once, on first initialisation of an empty
+  # data directory. To re-apply the migration later:
+  #     docker compose --profile pg exec db psql -U nyaya -d nyaya -f /docker-entrypoint-initdb.d/10-schema.sql
+  # ---------------------------------------------------------------------------
+  db:
+    profiles: ["pg"]
+    image: pgvector/pgvector:pg17
+    environment:
+      POSTGRES_USER: nyaya
+      POSTGRES_PASSWORD: nyaya
+      POSTGRES_DB: nyaya
+    ports:
+      # 5433 on the host so it cannot collide with a local Postgres on 5432.
+      - "5433:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./db/schema.sql:/docker-entrypoint-initdb.d/10-schema.sql:ro
+      - ./db/role.sql:/docker-entrypoint-initdb.d/20-app-role.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U nyaya -d nyaya"]
+      interval: 3s
+      timeout: 3s
+      retries: 30
+
+volumes:
+  pgdata:
