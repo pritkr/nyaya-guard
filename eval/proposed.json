@@ -1,0 +1,54 @@
+{
+  "generated_from": "logs/audit*.jsonl",
+  "count": 4,
+  "proposals": [
+    {
+      "id": "P01",
+      "query": "What is the capital of Australia and who won the 2011 cricket world cup?",
+      "count": 9,
+      "avg_confidence": 0,
+      "verdicts": [
+        "refused-low-confidence"
+      ],
+      "reason": "unanswered/low-confidence cluster (9 hits): refused-low-confidence",
+      "status": "proposed",
+      "suggested_action": "human review: assign expectedScheme + attributes, then promote to eval/queries.json"
+    },
+    {
+      "id": "P02",
+      "query": "Tell me about SpaceX Starship launch dates and ticket prices",
+      "count": 9,
+      "avg_confidence": 0,
+      "verdicts": [
+        "refused-low-confidence"
+      ],
+      "reason": "unanswered/low-confidence cluster (9 hits): refused-low-confidence",
+      "status": "proposed",
+      "suggested_action": "human review: assign expectedScheme + attributes, then promote to eval/queries.json"
+    },
+    {
+      "id": "P03",
+      "query": "My Aadhaar [AADHAAR-REDACTED], phone [PHONE-REDACTED] — check my cycle yojana status",
+      "count": 1,
+      "avg_confidence": 0,
+      "verdicts": [
+        "refused-low-confidence"
+      ],
+      "reason": "unanswered/low-confidence cluster (1 hit): refused-low-confidence",
+      "status": "proposed",
+      "suggested_action": "human review: assign expectedScheme + attributes, then promote to eval/queries.json"
+    },
+    {
+      "id": "P04",
+      "query": "What is the capital of Australia?",
+      "count": 9,
+      "avg_confidence": 0,
+      "verdicts": [
+        "refused-low-confidence"
+      ],
+      "reason": "unanswered/low-confidence cluster (9 hits): refused-low-confidence",
+      "status": "proposed",
+      "suggested_action": "human review: assign expectedScheme + attributes, then promote to eval/queries.json"
+    }
+  ]
+}
